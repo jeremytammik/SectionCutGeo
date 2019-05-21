@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command SectionCutGeo</Text>
+    <Description>Some description for SectionCutGeo</Description>
+    <Assembly>SectionCutGeo.dll</Assembly>
+    <FullClassName>SectionCutGeo.Command</FullClassName>
+    <ClientId>fbe6996f-3d0b-41bc-aacd-d06417fac035</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
