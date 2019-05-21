@@ -67,8 +67,6 @@ namespace SectionCutGeo
         section_view.ViewDirection, 
         section_view.Origin );
 
-      SketchPlane plane3 = SketchPlane.Create( doc, plane2 );
-
       int geo_count = 0;
       int null_geo_count = 0;
       int curve_count = 0;
@@ -77,6 +75,8 @@ namespace SectionCutGeo
       using( Transaction tx = new Transaction( doc ) )
       {
         tx.Start( "Create Section Cut Model Curves" );
+
+        SketchPlane plane3 = SketchPlane.Create( doc, plane2 );
 
         foreach( Element e in a )
         {
@@ -112,7 +112,14 @@ namespace SectionCutGeo
 
                 foreach( Edge edge in edges )
                 {
-                  doc.Create.NewModelCurve( edge.AsCurve(), plane3 );
+                  try
+                  {
+                    doc.Create.NewModelCurve( edge.AsCurve(), plane3 );
+                  }
+                  catch( Autodesk.Revit.Exceptions.ArgumentException )
+                  {
+                    // Thrown if curve does not lie in the plane
+                  }
                 }
               }
             }
