@@ -65,6 +65,8 @@ namespace SectionCutGeo
 
       int geo_count = 0;
       int null_geo_count = 0;
+      int curve_count = 0;
+      int solid_count = 0;
 
       using( Transaction tx = new Transaction( doc ) )
       {
@@ -88,7 +90,25 @@ namespace SectionCutGeo
 
             foreach( Curve curve in curves )
             {
+              ++curve_count;
               doc.Create.NewModelCurve( curve, plane );
+            }
+
+            foreach( GeometryObject obj in geo )
+            {
+              if( obj is Solid )
+              {
+                ++solid_count;
+
+                Solid sol = obj as Solid;
+
+                EdgeArray edges = sol.Edges;
+
+                foreach( Edge edge in edges )
+                {
+                  doc.Create.NewModelCurve( edge.AsCurve(), plane );
+                }
+              }
             }
           }
         }
