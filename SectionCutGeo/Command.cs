@@ -61,7 +61,13 @@ namespace SectionCutGeo
         View = section_view
       };
 
-      SketchPlane plane = section_view.SketchPlane;
+      SketchPlane plane1 = section_view.SketchPlane; // this is null
+
+      Plane plane2 = Plane.CreateByNormalAndOrigin( 
+        section_view.ViewDirection, 
+        section_view.Origin );
+
+      SketchPlane plane3 = SketchPlane.Create( doc, plane2 );
 
       int geo_count = 0;
       int null_geo_count = 0;
@@ -91,7 +97,7 @@ namespace SectionCutGeo
             foreach( Curve curve in curves )
             {
               ++curve_count;
-              doc.Create.NewModelCurve( curve, plane );
+              doc.Create.NewModelCurve( curve, plane3 );
             }
 
             foreach( GeometryObject obj in geo )
@@ -106,7 +112,7 @@ namespace SectionCutGeo
 
                 foreach( Edge edge in edges )
                 {
-                  doc.Create.NewModelCurve( edge.AsCurve(), plane );
+                  doc.Create.NewModelCurve( edge.AsCurve(), plane3 );
                 }
               }
             }
