@@ -23,7 +23,9 @@ namespace SectionCutGeo
     /// </summary>
     public void Increment( object obj )
     {
-      string key = obj.GetType().Name;
+      string key = null == obj
+        ? "null"
+        : obj.GetType().Name;
 
       if( !ContainsKey(key))
       {
@@ -61,26 +63,10 @@ namespace SectionCutGeo
       JtObjCounter geoCounter,
       GeometryElement geo )
     {
-      Document doc = plane3.Document;
+      geoCounter.Increment( geo );
 
-      if( null == geo )
+      if( null != geo )
       {
-        geoCounter.Increment( "GeometryElement == null" );
-      }
-      else
-      {
-        geoCounter.Increment( "GeometryElement non-null" );
-
-        //IEnumerable<GeometryObject> curves 
-        //  = geo.Where<GeometryObject>( 
-        //    o => o is Curve );
-
-        //foreach( Curve curve in curves )
-        //{
-        //  ++curve_count;
-        //  doc.Create.NewModelCurve( curve, plane3 );
-        //}
-
         foreach( GeometryObject obj in geo )
         {
           geoCounter.Increment( obj );
@@ -89,6 +75,8 @@ namespace SectionCutGeo
 
           if( null != sol )
           {
+            Document doc = plane3.Document;
+
             EdgeArray edges = sol.Edges;
 
             foreach( Edge edge in edges )
