@@ -93,6 +93,15 @@ namespace SectionCutGeo
 
             foreach( Edge edge in edges )
             {
+              // Here we simply try to create a model 
+              // curve in the given plane. This throws
+              // an exception if the curve does not lie
+              // in the plane. That is bad. Better would 
+              // be to check whether the curve is in the
+              // plane programmatically instead of throwing
+              // an exception. How can we determine whether 
+              // a curve lies in a plane?
+
               try
               {
                 doc.Create.NewModelCurve( edge.AsCurve(), plane3 );
