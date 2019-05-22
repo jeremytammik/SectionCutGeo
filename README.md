@@ -6,6 +6,26 @@ Discussed in depth in
 the [Revit API discussion forum](http://forums.autodesk.com/t5/revit-api-forum/bd-p/160) thread
 on [how to receive intersection of section and `FamilyInstance`](https://forums.autodesk.com/t5/revit-api-forum/how-to-receive-intersection-of-section-and-familyinstance/m-p/8802202).
 
+Sample model 3D view:
+
+![Sample model 3D view](img/section_cut_geo_3d.png)
+
+Plan view showing section location:
+
+![Plan view showing section location](img/section_cut_geo_plan.png)
+
+Cut geometry in section view:
+
+![Cut geometry in section view](img/section_cut_geo_cut.png)
+
+Model lines representing the cut geometry of the window family instance produced by the add-in in section view:
+
+![Model lines representing cut geometry in section view](img/section_cut_geo_cut_geo_window.png)
+
+Model lines representing the cut geometry of walls, door and window isolated in 3D view:
+
+![Model lines representing cut geometry isolated in 3D view](img/section_cut_geo_cut_geo_3d.png)
+
 
 ## Author
 

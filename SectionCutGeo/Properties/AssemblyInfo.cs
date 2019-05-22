@@ -37,7 +37,10 @@ using System.Runtime.InteropServices;
 //
 // 2019-05-22 2020.0.0.0 first working release, using NewModelCurve and an exception if curve is not in cut plane
 // 2019-05-22 2020.0.0.1 added comment and cleanup
-// 2019-05-22 2020.0.0.2 cleaned up object cunter formatting
+// 2019-05-22 2020.0.0.2 cleaned up object counter formatting
+// 2019-05-22 2020.0.0.3 added counter for curve types; discovered that we only need to process `Line` objects
+// 2019-05-22 2020.0.0.3 implemented IsLineInPlane predicate
+// 2019-05-22 2020.0.0.3 implemented read-only curve collection and separate later model curve creation
 //
-[assembly: AssemblyVersion( "2020.0.0.2" )]
-[assembly: AssemblyFileVersion( "2020.0.0.2" )]
+[assembly: AssemblyVersion( "2020.0.0.3" )]
+[assembly: AssemblyFileVersion( "2020.0.0.3" )]
