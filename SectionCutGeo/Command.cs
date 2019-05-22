@@ -85,9 +85,10 @@ namespace SectionCutGeo
     /// <summary>
     /// Recursively handle geometry element
     /// </summary>
-    static void GetCurvesInPlane( 
-      SketchPlane plane3,
+    static void GetCurvesInPlane(
+      List<Curve> curves,
       JtObjCounter geoCounter,
+      Plane plane,
       GeometryElement geo )
     {
       geoCounter.Increment( geo );
@@ -102,21 +103,10 @@ namespace SectionCutGeo
 
           if( null != sol )
           {
-            Document doc = plane3.Document;
-
             EdgeArray edges = sol.Edges;
 
             foreach( Edge edge in edges )
             {
-              // Here we simply try to create a model 
-              // curve in the given plane. This throws
-              // an exception if the curve does not lie
-              // in the plane. That is bad. Better would 
-              // be to check whether the curve is in the
-              // plane programmatically instead of throwing
-              // an exception. How can we determine whether 
-              // a curve lies in a plane?
-
               Curve curve = edge.AsCurve();
 
               Debug.Assert( curve is Line, 
@@ -124,9 +114,9 @@ namespace SectionCutGeo
 
               geoCounter.Increment( curve );
 
-              if( IsLineInPlane( curve as Line, plane3.GetPlane() ) )
+              if( IsLineInPlane( curve as Line, plane ) )
               {
-                doc.Create.NewModelCurve( edge.AsCurve(), plane3 );
+                curves.Add( curve );
               }
             }
           }
@@ -136,8 +126,14 @@ namespace SectionCutGeo
 
             if( null != inst )
             {
-              GetCurvesInPlane( plane3, geoCounter, 
-                inst.GetInstanceGeometry() );
+              GetCurvesInPlane( curves, geoCounter, 
+                plane, inst.GetInstanceGeometry() );
+            }
+            else
+            {
+              Debug.Assert( false,
+                "unsupported geometry object " 
+                + obj.GetType().Name );
             }
           }
         }
@@ -165,17 +161,6 @@ namespace SectionCutGeo
         return Result.Failed;
       }
 
-      //ICollection<ElementId> ids = uidoc.Selection
-      //  .GetElementIds();
-
-      //int n = ids.Count;
-
-      //if( 0 == n )
-      //{
-      //  message = "Please select some elements before launching this command";
-      //  return Result.Failed;
-      //}
-
       FilteredElementCollector a 
         = new FilteredElementCollector( 
           doc, section_view.Id );
@@ -192,28 +177,38 @@ namespace SectionCutGeo
         section_view.ViewDirection, 
         section_view.Origin );
 
-      //int geo_count = 0;
-      //int null_geo_count = 0;
-      //int curve_count = 0;
-      //int solid_count = 0;
+      JtObjCounter geoCounter = new JtObjCounter();
+
+      List<Curve> curves = new List<Curve>();
+
+      foreach( Element e in a )
+      {
+        geoCounter.Increment( e );
+
+        GeometryElement geo = e.get_Geometry( opt );
+
+        GetCurvesInPlane( curves, 
+          geoCounter, plane2, geo );
+      }
+
+      Debug.Print( "Object analysed:" );
+      geoCounter.Print();
+
+      Debug.Print( 
+        "{0} cut geometry lines found in section plane", 
+        curves.Count );
 
       using( Transaction tx = new Transaction( doc ) )
       {
         tx.Start( "Create Section Cut Model Curves" );
 
-        JtObjCounter geoCounter = new JtObjCounter();
+        SketchPlane plane3 = SketchPlane.Create( 
+          doc, plane2 );
 
-        SketchPlane plane3 = SketchPlane.Create( doc, plane2 );
-
-        foreach( Element e in a )
+        foreach(Curve c in curves )
         {
-          geoCounter.Increment( e );
-
-          GeometryElement geo = e.get_Geometry( opt );
-
-          GetCurvesInPlane( plane3, geoCounter, geo );
+          doc.Create.NewModelCurve( c, plane3 );
         }
-        geoCounter.Print();
 
         tx.Commit();
       }
