@@ -43,7 +43,7 @@ namespace SectionCutGeo
       keys.Sort();
       foreach(string key in keys)
       {
-        Debug.Print( "{0,5} {1}", key, this[key] );
+        Debug.Print( "{0,5} {1}", this[key], key );
       }
     }
   }
