@@ -35,7 +35,8 @@ using System.Runtime.InteropServices;
 //
 // History:
 //
-// 2019-05-22 2020.0.0.1 first working release, using NewModelCurve and an exception if curve is not in cut plane
+// 2019-05-22 2020.0.0.0 first working release, using NewModelCurve and an exception if curve is not in cut plane
+// 2019-05-22 2020.0.0.1 added comment and cleanup
 //
 [assembly: AssemblyVersion( "2020.0.0.1" )]
 [assembly: AssemblyFileVersion( "2020.0.0.1" )]
