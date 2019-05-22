@@ -49,9 +49,38 @@ namespace SectionCutGeo
   [Transaction( TransactionMode.Manual )]
   public class Command : IExternalCommand
   {
+    /// <summary>
+    ///  Maximum distance for line to be considered 
+    ///  to lie in plane
+    /// </summary>
+    const double _eps = 1.0e-6;
+
+    /// <summary>
+    /// User instructions for running this external command
+    /// </summary>
     const string _instructions = "Please launch this "
       + "command in a section view with fine level of "
       + "detail and far bound clipping set to 'Clip with line'";
+
+    /// <summary>
+    /// Predicate returning true if the given line 
+    /// lies in the given plane
+    /// </summary>
+    static bool IsLineInPlane( 
+      Line line, 
+      Plane plane )
+    {
+      XYZ p0 = line.GetEndPoint( 0 );
+      XYZ p1 = line.GetEndPoint( 1 );
+      UV uv0, uv1;
+      double d0, d1;
+
+      plane.Project( p0, out uv0, out d0 );
+      plane.Project( p1, out uv1, out d1 );
+
+      return _eps > Math.Abs( d0 ) 
+        && _eps > Math.Abs( d1 );
+    }
 
     /// <summary>
     /// Recursively handle geometry element
@@ -88,13 +117,16 @@ namespace SectionCutGeo
               // an exception. How can we determine whether 
               // a curve lies in a plane?
 
-              try
+              Curve curve = edge.AsCurve();
+
+              Debug.Assert( curve is Line, 
+                "we currently only support lines here" );
+
+              geoCounter.Increment( curve );
+
+              if( IsLineInPlane( curve as Line, plane3.GetPlane() ) )
               {
                 doc.Create.NewModelCurve( edge.AsCurve(), plane3 );
-              }
-              catch( Autodesk.Revit.Exceptions.ArgumentException )
-              {
-                // Thrown if curve does not lie in the plane
               }
             }
           }
