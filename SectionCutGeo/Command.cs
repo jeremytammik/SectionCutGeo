@@ -87,7 +87,9 @@ namespace SectionCutGeo
     }
 
     /// <summary>
-    /// Recursively handle geometry element
+    /// Recursively handle geometry element to 
+    /// retrieve all curves it contains that lie
+    /// in the given plane
     /// </summary>
     static void GetCurvesInPlane(
       List<Curve> curves,
