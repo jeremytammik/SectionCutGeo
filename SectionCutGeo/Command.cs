@@ -11,8 +11,8 @@ using Autodesk.Revit.UI;
 namespace SectionCutGeo
 {
   /// <summary>
-  /// A class to count and report the number of objects 
-  /// encountered.
+  /// A class to count and report the 
+  /// number of objects encountered.
   /// </summary>
   class JtObjCounter : Dictionary<string, int>
   {
@@ -25,7 +25,7 @@ namespace SectionCutGeo
         ? "null"
         : obj.GetType().Name;
 
-      if( !ContainsKey(key))
+      if( !ContainsKey( key ) )
       {
         Add( key, 0 );
       }
@@ -39,7 +39,7 @@ namespace SectionCutGeo
     {
       List<string> keys = new List<string>( Keys );
       keys.Sort();
-      foreach(string key in keys)
+      foreach( string key in keys )
       {
         Debug.Print( "{0,5} {1}", this[key], key );
       }
@@ -50,8 +50,8 @@ namespace SectionCutGeo
   public class Command : IExternalCommand
   {
     /// <summary>
-    ///  Maximum distance for line to be considered 
-    ///  to lie in plane
+    /// Maximum distance for line to be 
+    /// considered to lie in plane
     /// </summary>
     const double _eps = 1.0e-6;
 
@@ -66,8 +66,8 @@ namespace SectionCutGeo
     /// Predicate returning true if the given line 
     /// lies in the given plane
     /// </summary>
-    static bool IsLineInPlane( 
-      Line line, 
+    static bool IsLineInPlane(
+      Line line,
       Plane plane )
     {
       XYZ p0 = line.GetEndPoint( 0 );
@@ -80,10 +80,10 @@ namespace SectionCutGeo
 
       Debug.Assert( 0 <= d0,
         "expected non-negative distance" );
-      Debug.Assert( 0 <= d1, 
+      Debug.Assert( 0 <= d1,
         "expected non-negative distance" );
 
-      return (_eps > d0) && (_eps > d1);
+      return ( _eps > d0 ) && ( _eps > d1 );
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ namespace SectionCutGeo
             {
               Curve curve = edge.AsCurve();
 
-              Debug.Assert( curve is Line, 
+              Debug.Assert( curve is Line,
                 "we currently only support lines here" );
 
               geoCounter.Increment( curve );
@@ -130,13 +130,13 @@ namespace SectionCutGeo
 
             if( null != inst )
             {
-              GetCurvesInPlane( curves, geoCounter, 
+              GetCurvesInPlane( curves, geoCounter,
                 plane, inst.GetInstanceGeometry() );
             }
             else
             {
               Debug.Assert( false,
-                "unsupported geometry object " 
+                "unsupported geometry object "
                 + obj.GetType().Name );
             }
           }
@@ -165,11 +165,12 @@ namespace SectionCutGeo
         return Result.Failed;
       }
 
-      FilteredElementCollector a 
-        = new FilteredElementCollector( 
+      FilteredElementCollector a
+        = new FilteredElementCollector(
           doc, section_view.Id );
 
-      Options opt = new Options() {
+      Options opt = new Options()
+      {
         ComputeReferences = false,
         IncludeNonVisibleObjects = false,
         View = section_view
@@ -177,8 +178,8 @@ namespace SectionCutGeo
 
       SketchPlane plane1 = section_view.SketchPlane; // this is null
 
-      Plane plane2 = Plane.CreateByNormalAndOrigin( 
-        section_view.ViewDirection, 
+      Plane plane2 = Plane.CreateByNormalAndOrigin(
+        section_view.ViewDirection,
         section_view.Origin );
 
       JtObjCounter geoCounter = new JtObjCounter();
@@ -191,25 +192,25 @@ namespace SectionCutGeo
 
         GeometryElement geo = e.get_Geometry( opt );
 
-        GetCurvesInPlane( curves, 
+        GetCurvesInPlane( curves,
           geoCounter, plane2, geo );
       }
 
-      Debug.Print( "Object analysed:" );
+      Debug.Print( "Objects analysed:" );
       geoCounter.Print();
 
-      Debug.Print( 
-        "{0} cut geometry lines found in section plane", 
+      Debug.Print(
+        "{0} cut geometry lines found in section plane.",
         curves.Count );
 
       using( Transaction tx = new Transaction( doc ) )
       {
         tx.Start( "Create Section Cut Model Curves" );
 
-        SketchPlane plane3 = SketchPlane.Create( 
+        SketchPlane plane3 = SketchPlane.Create(
           doc, plane2 );
 
-        foreach(Curve c in curves )
+        foreach( Curve c in curves )
         {
           doc.Create.NewModelCurve( c, plane3 );
         }
