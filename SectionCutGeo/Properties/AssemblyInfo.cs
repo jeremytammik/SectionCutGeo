@@ -41,7 +41,8 @@ using System.Runtime.InteropServices;
 // 2019-05-22 2020.0.0.3 added counter for curve types; discovered that we only need to process `Line` objects
 // 2019-05-22 2020.0.0.3 implemented IsLineInPlane predicate
 // 2019-05-22 2020.0.0.3 implemented read-only curve collection and separate later model curve creation
-// 2019-05-23 2020.0.0.4 non-negative distance returned by Plane.Project
+// 2019-05-22 2020.0.0.4 added sample images
+// 2019-05-23 2020.0.0.5 non-negative distance returned by Plane.Project
 //
-[assembly: AssemblyVersion( "2020.0.0.4" )]
-[assembly: AssemblyFileVersion( "2020.0.0.4" )]
+[assembly: AssemblyVersion( "2020.0.0.5" )]
+[assembly: AssemblyFileVersion( "2020.0.0.5" )]
