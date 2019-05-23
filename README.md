@@ -2,9 +2,15 @@
 
 Revit C# .NET add-in to retrieve section view cut geometry.
 
-Discussed in depth in 
+The SectionCutGeo add-in retrieves the geometry resulting from cutting a family instance in a section view.
+
+It was prompted by
 the [Revit API discussion forum](http://forums.autodesk.com/t5/revit-api-forum/bd-p/160) thread
 on [how to receive intersection of section and `FamilyInstance`](https://forums.autodesk.com/t5/revit-api-forum/how-to-receive-intersection-of-section-and-familyinstance/m-p/8802202).
+
+It is explained in detail 
+in [The Building Coder](https://thebuildingcoder.typepad.com) discussion 
+on [retrieving section view intersection cut geometry](https://thebuildingcoder.typepad.com/blog/2019/05/retrieving-section-view-intersection-cut-geometry.html).
 
 Sample model 3D view:
 
