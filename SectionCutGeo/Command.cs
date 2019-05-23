@@ -78,8 +78,12 @@ namespace SectionCutGeo
       plane.Project( p0, out uv0, out d0 );
       plane.Project( p1, out uv1, out d1 );
 
-      return _eps > Math.Abs( d0 ) 
-        && _eps > Math.Abs( d1 );
+      Debug.Assert( 0 <= d0,
+        "expected non-negative distance" );
+      Debug.Assert( 0 <= d1, 
+        "expected non-negative distance" );
+
+      return (_eps > d0) && (_eps > d1);
     }
 
     /// <summary>
